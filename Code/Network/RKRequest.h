@@ -163,6 +163,7 @@ typedef void(^RKRequestDidFailLoadWithErrorBlock)(NSError *error);
     NSMutableURLRequest *_URLRequest;
     NSURLConnection *_connection;
     NSDictionary *_additionalHTTPHeaders;
+    NSMutableDictionary *_HTTPHeaders;
     NSObject<RKRequestSerializable> *_params;
     NSObject<RKRequestDelegate> *_delegate;
     NSObject<RKConfigurationDelegate> *_configurationDelegate;
@@ -283,6 +284,12 @@ typedef void(^RKRequestDidFailLoadWithErrorBlock)(NSError *error);
  A dictionary of additional HTTP Headers to send with the request
  */
 @property (nonatomic, retain) NSDictionary *additionalHTTPHeaders;
+
+
+/**
+ A dictionary of HTTP Headers to send with the request
+ */
+@property (nonatomic, retain) NSMutableDictionary *HTTPHeaders;
 
 /**
  An opaque pointer to associate user defined data with the request.
@@ -781,6 +788,9 @@ typedef void(^RKRequestDidFailLoadWithErrorBlock)(NSError *error);
  @param method The HTTP method to confirm the request was sent with.
  */
 - (BOOL)wasSentToResourcePath:(NSString *)resourcePath method:(RKRequestMethod)method;
+
+
+- (void)setValue:(NSString *)value forHTTPHeaderField:(NSString *)field;
 
 @end
 

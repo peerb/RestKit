@@ -92,6 +92,7 @@ RKRequestMethod RKRequestMethodTypeFromName(NSString *methodName) {
 @synthesize URLRequest = _URLRequest;
 @synthesize delegate = _delegate;
 @synthesize additionalHTTPHeaders = _additionalHTTPHeaders;
+@synthesize HTTPHeaders = _HTTPHeaders;
 @synthesize params = _params;
 @synthesize userData = _userData;
 @synthesize authenticationType = _authenticationType;
@@ -208,6 +209,8 @@ RKRequestMethod RKRequestMethodTypeFromName(NSString *methodName) {
 	_params = nil;
   	[_additionalHTTPHeaders release];
   	_additionalHTTPHeaders = nil;
+    [_HTTPHeaders release];
+  	_HTTPHeaders = nil;
   	[_username release];
   	_username = nil;
   	[_password release];
@@ -273,11 +276,19 @@ RKRequestMethod RKRequestMethodTypeFromName(NSString *methodName) {
     [self.URLRequest setHTTPBody:[HTTPBodyString dataUsingEncoding:NSASCIIStringEncoding]];
 }
 
+- (void)setValue:(NSString *)value forHTTPHeaderField:(NSString *)field {
+    [_HTTPHeaders setValue:field forKey:value];
+}
+
 - (void)addHeadersToRequest {
 	NSString *header = nil;
 	for (header in _additionalHTTPHeaders) {
 		[_URLRequest setValue:[_additionalHTTPHeaders valueForKey:header] forHTTPHeaderField:header];
 	}
+    
+    for (header in _HTTPHeaders) {
+		[_URLRequest setValue:[_HTTPHeaders valueForKey:header] forHTTPHeaderField:header];
+	} 
 
 	if ([self shouldSendParams]) {
 		// Temporarily support older RKRequestSerializable implementations
